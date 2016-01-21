@@ -1,0 +1,186 @@
+/***********************************************************************
+ * Author: Elena Chong
+ * Last time modified: January 17th, 2016
+ * Description: Maze Line Solver Vr 1.0 for the RedBot
+ ***********************************************************************/
+
+#include <RedBot.h>
+// From RedBot Arduino Library
+RedBotSensor IRSensor1 = RedBotSensor(A3); // initialize a sensor object on A3
+RedBotSensor IRSensor2 = RedBotSensor(A6); // initialize a sensor object on A6
+RedBotSensor IRSensor3 = RedBotSensor(A7); // initialize a sensor object on A7
+RedBotMotors motors;
+RedBotEncoder encoder = RedBotEncoder(A2, 10);  // initializes encoder on pins A2 and 10
+int buttonPin = 12;
+int countsPerRev = 192;   // 4 pairs of N-S x 48:1 gearbox = 192 ticks per wheel rev
+float wheelDiam = 2.56;  // diam = 65mm / 25.4 mm/in
+float wheelCirc = PI*wheelDiam;  // Redbot wheel circumference = pi*D
+// variables used to store the left and right encoder counts.
+int lCount;
+int rCount;
+boolean goStraight = false;
+boolean goTurn = false;
+boolean intersection = true;
+
+int threshold = 900;
+
+
+void setup()
+{
+//  pinMode(buttonPin, INPUT_PULLUP);
+  Serial.begin(9600);
+}
+
+void loop()
+{
+  Serial.print("IR Sensor Readings: ");
+  Serial.print(IRSensor1.read());
+  Serial.print("\t");  // tab character
+  Serial.print(IRSensor2.read());
+  Serial.print("\t");  // tab character
+  Serial.print(IRSensor3.read());
+  Serial.print("\t");  // tab character
+    // print out to Serial Monitor the left and right encoder counts.
+  Serial.println();
+  
+  //***** going straight *****//
+  if(IRSensor2.read() > threshold){
+    motors.leftMotor(-100);
+    motors.rightMotor(100); 
+  }
+  else if(IRSensor1.read() > threshold){
+    motors.leftMotor(100);
+    motors.rightMotor(100);
+  }
+  else if(IRSensor3.read() > threshold){
+    motors.leftMotor(-100);
+    motors.rightMotor(-100);    
+  }
+  //***** end of going staight *****//
+
+  //** turn right **//
+  if(IRSensor2.read() > threshold && IRSensor3.read() > threshold && IRSensor1.read() < threshold){
+    // turn right over going straight
+//    motors.leftMotor(-100);
+//    motors.rightMotor(-100);   
+    goForwardDecide();
+    if(goTurn){
+      while(IRSensor2.read() > threshold && IRSensor3.read() > threshold){
+        motors.leftMotor(-100);
+        motors.rightMotor(-100); 
+      }
+    goTurn = false;
+    }
+    else if(goStraight){
+      goStraight = false;
+    motors.leftMotor(-100);
+    motors.rightMotor(100);      
+    }
+  }
+  //** END OF turn right **//
+
+  //** LEFT TURN **//
+  if(IRSensor2.read() > threshold && IRSensor3.read() < threshold && IRSensor1.read() > threshold){
+    // turn right over going straight
+//    motors.leftMotor(-100);
+//    motors.rightMotor(-100);   
+    goForwardDecide();
+    if(goStraight){
+      goStraight = false;
+    motors.leftMotor(-100);
+    motors.rightMotor(100);      
+    }
+    else if(goTurn){
+    motors.leftMotor(100);
+    motors.rightMotor(100);
+    goTurn = false;
+    }
+  }
+  //***** END OF LEFT TURN *****//
+  
+  if(IRSensor2.read() > threshold && IRSensor3.read() > threshold && IRSensor1.read() > threshold){
+    goForwardDecide();
+    if(goTurn){
+      motors.leftMotor(-100);
+      motors.rightMotor(-100);
+      goTurn = false;
+    }
+    else if(goStraight){
+      goStraight = false;
+      motors.leftMotor(-100);
+      motors.rightMotor(100);       
+    }
+  }
+//  if(IRSensor2.read() < threshold && IRSensor1.read() < threshold && IRSensor3.read() > threshold){
+//    motors.brake();
+//  }
+//  while(IRSensor2.read() > threshold && IRSensor1.read() > 0 && IRSensor3.read() > 0){
+//    if(IRSensor1.read() > threshold){
+//      motors.leftMotor(-50);
+//      motors.rightMotor(100);
+//    }
+//    if(IRSensor3.read() > threshold){
+//      motors.leftMotor(-100);
+//      motors.rightMotor(50);
+//    }
+//    motors.leftMotor(-100);
+//    motors.rightMotor(100);
+//    
+//  }
+//  motors.brake();
+}
+  void goForwardDecide() {
+    // move forward and decide based on values read.
+    Serial.println("Move forward an inch");
+  driveDistance(1, -112, 100);
+  delay(200);
+    if(IRSensor3.read() < threshold && IRSensor2.read() < threshold && IRSensor1.read() < threshold) {
+      goStraight = false;
+      goTurn = true;
+//      intersection = false;
+    }
+    delay(200);
+  driveDistance(2, 112,-100);
+  delay(200);
+  motors.brake();
+  }
+
+
+// Drive distance function from RedBot library examples
+// distance in inches
+// leftPower must be negative to drive forward
+// rightPower must be positive to drive forward
+void driveDistance(float distance, int leftPower, int rightPower)
+{
+  long lCount = 0;
+  long rCount = 0;
+  float numRev;
+  // debug
+  Serial.print("driveDistance() ");
+  Serial.print(distance);
+  Serial.print(" inches at ");
+  Serial.print(leftPower);
+  Serial.println(" left power.");
+  Serial.print(rightPower);
+  Serial.println(" right power.");
+  numRev = (float) distance / wheelCirc;
+  Serial.println(numRev, 3);
+  encoder.clearEnc(BOTH);  // clear the encoder count
+  motors.leftMotor(leftPower);
+  motors.rightMotor(rightPower);
+
+  while (abs(rCount) < numRev*countsPerRev)
+  {
+    // while the left encoder is less than the target count -- debug print 
+    // the encoder values and wait -- this is a holding loop.
+    lCount = encoder.getTicks(LEFT);
+    rCount = encoder.getTicks(RIGHT);
+    Serial.print(lCount);
+    Serial.print("\t");
+    Serial.print(rCount);
+    Serial.print("\t");
+    Serial.println(numRev*countsPerRev);
+  }
+  // now apply "brakes" to stop the motors.
+  motors.brake();
+}

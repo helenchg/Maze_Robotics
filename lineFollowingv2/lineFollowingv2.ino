@@ -54,23 +54,44 @@ void loop()
 //    motors.stop();
 //  }
 
-  if (IRSensor2.read() > midThreshold) {
-    motors.drive(150);
+  if (IRSensor2.read() > midThreshold && IRSensor1.read() < midThreshold &&IRSensor3.read() < midThreshold) {
+    motors.drive(100);
   }
-    else if (IRSensor3.read() >rightThreshold) {
-    motors.leftMotor(155);
-    motors.rightMotor(155);
-  }  
+//    else if (IRSensor2.read() < midThreshold && IRSensor1.read() < midThreshold && IRSensor3.read() < midThreshold) {
+//    motors.stop();
+//  }
+  else if (IRSensor2.read() > midThreshold && IRSensor1.read() < midThreshold && IRSensor3.read() > midThreshold) {
+    motors.drive(100);
+    delay(100);
+//    motors.leftMotor(-155); //left positive is forward
+//    motors.rightMotor(-155); //right positive is backward
+    
+    motors.stop();
+    delay(200);
+  }
+//  motors.stop();
+//  else if (IRSensor2.read() > midThreshold && IRSensor1.read() > midThreshold && IRSensor3.read() < midThreshold) {
+//    delay(200);
+//        motors.stop();
+//    motors.leftMotor(155); //left positive is forward
+//    motors.rightMotor(155); //right positive is backward
+//  }
+//    else if (IRSensor3.read() >rightThreshold) {
+//      motors.stop();
+//      delay(200);
+//    motors.leftMotor(-155);
+//    motors.rightMotor(-155);
+//  }  
 //  else if(IRSensor1.read() > leftThreshold){
 //    motors.leftMotor(155);
 //    motors.rightMotor(155);    
 //  }
-  else{
+//  else{
 //    motors.stop();
-    delay(200);
-    motors.leftMotor(155);
-    motors.rightMotor(155);    
-  }
+//    delay(200);
+//    motors.leftMotor(155);
+//    motors.rightMotor(155);    
+//  }
 //  delay(200);
 //  motors.stop();
   //    motors.leftMotor(-155);
