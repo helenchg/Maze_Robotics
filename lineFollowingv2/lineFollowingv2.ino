@@ -61,10 +61,10 @@ void loop()
 //    motors.stop();
 //  }
   else if (IRSensor2.read() > midThreshold && IRSensor1.read() < midThreshold && IRSensor3.read() > midThreshold) {
-    motors.drive(100);
+//    motors.drive(100);
     delay(100);
-//    motors.leftMotor(-155); //left positive is forward
-//    motors.rightMotor(-155); //right positive is backward
+    motors.leftMotor(-155); //left positive is forward
+    motors.rightMotor(-155); //right positive is backward
     
     motors.stop();
     delay(200);
