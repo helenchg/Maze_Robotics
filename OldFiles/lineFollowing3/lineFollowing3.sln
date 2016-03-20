@@ -1,0 +1,48 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lineFollowing3", "lineFollowing3.vcxproj", "{8A0689C5-BFBA-4A39-A024-B2D49F5E2E97}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MazeLineSolver2", "..\..\..\Arduino\MazeLineSolver2\MazeLineSolver2.vcxproj", "{1C3FA3F1-1AD2-4584-A53B-572064144933}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lineFollowingv2", "..\lineFollowingv2\lineFollowingv2.vcxproj", "{B7C69E34-07A8-4A97-8037-FA8083078D19}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8A0689C5-BFBA-4A39-A024-B2D49F5E2E97}.Debug|x64.ActiveCfg = Debug|x64
+		{8A0689C5-BFBA-4A39-A024-B2D49F5E2E97}.Debug|x64.Build.0 = Debug|x64
+		{8A0689C5-BFBA-4A39-A024-B2D49F5E2E97}.Debug|x86.ActiveCfg = Debug|Win32
+		{8A0689C5-BFBA-4A39-A024-B2D49F5E2E97}.Debug|x86.Build.0 = Debug|Win32
+		{8A0689C5-BFBA-4A39-A024-B2D49F5E2E97}.Release|x64.ActiveCfg = Release|x64
+		{8A0689C5-BFBA-4A39-A024-B2D49F5E2E97}.Release|x64.Build.0 = Release|x64
+		{8A0689C5-BFBA-4A39-A024-B2D49F5E2E97}.Release|x86.ActiveCfg = Release|Win32
+		{8A0689C5-BFBA-4A39-A024-B2D49F5E2E97}.Release|x86.Build.0 = Release|Win32
+		{1C3FA3F1-1AD2-4584-A53B-572064144933}.Debug|x64.ActiveCfg = Debug|x64
+		{1C3FA3F1-1AD2-4584-A53B-572064144933}.Debug|x64.Build.0 = Debug|x64
+		{1C3FA3F1-1AD2-4584-A53B-572064144933}.Debug|x86.ActiveCfg = Debug|Win32
+		{1C3FA3F1-1AD2-4584-A53B-572064144933}.Debug|x86.Build.0 = Debug|Win32
+		{1C3FA3F1-1AD2-4584-A53B-572064144933}.Release|x64.ActiveCfg = Release|x64
+		{1C3FA3F1-1AD2-4584-A53B-572064144933}.Release|x64.Build.0 = Release|x64
+		{1C3FA3F1-1AD2-4584-A53B-572064144933}.Release|x86.ActiveCfg = Release|Win32
+		{1C3FA3F1-1AD2-4584-A53B-572064144933}.Release|x86.Build.0 = Release|Win32
+		{B7C69E34-07A8-4A97-8037-FA8083078D19}.Debug|x64.ActiveCfg = Debug|x64
+		{B7C69E34-07A8-4A97-8037-FA8083078D19}.Debug|x64.Build.0 = Debug|x64
+		{B7C69E34-07A8-4A97-8037-FA8083078D19}.Debug|x86.ActiveCfg = Debug|Win32
+		{B7C69E34-07A8-4A97-8037-FA8083078D19}.Debug|x86.Build.0 = Debug|Win32
+		{B7C69E34-07A8-4A97-8037-FA8083078D19}.Release|x64.ActiveCfg = Release|x64
+		{B7C69E34-07A8-4A97-8037-FA8083078D19}.Release|x64.Build.0 = Release|x64
+		{B7C69E34-07A8-4A97-8037-FA8083078D19}.Release|x86.ActiveCfg = Release|Win32
+		{B7C69E34-07A8-4A97-8037-FA8083078D19}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
