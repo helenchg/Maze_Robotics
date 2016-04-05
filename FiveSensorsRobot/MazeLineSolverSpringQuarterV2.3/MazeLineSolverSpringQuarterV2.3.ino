@@ -99,17 +99,31 @@ void loop()
 		goForwardDecide();
 	}
 
-	// PROBLEM WITH STOP OR U TURN. IT'S TOO SENSITIVE AND WON'T LET THE TURNS PERFORM FIRST. FIGURE THIS OUT
 	// TO-DO: Let turn performs before stop or u-turn
 	if ((leftSensors() < THRESHOLD) && (centerSensors() < THRESHOLD) && (rightSensors() < THRESHOLD) && (farRight() < THRESHOLD) && (farLeft() < THRESHOLD))
 	{
 		delay(100); 
-		Serial.println("STOP");
+		Serial.println("U-TURN");
 		//motors.brake();
-		driveDistance(3, -SPEED, SPEED); //drive forward two inches before U turn
-		motors.leftMotor(-200);
+		//driveDistance(1, -SPEED, SPEED); //drive forward 1 inches before U turn
+		while ((leftSensors() < THRESHOLD) && (centerSensors() < THRESHOLD) && (rightSensors() < THRESHOLD) && (farRight() < THRESHOLD) && (farLeft() < THRESHOLD)) {
+			motors.leftMotor(-100);
+			motors.rightMotor(-100);
+			if (centerSensors() > THRESHOLD && leftSensors() > THRESHOLD); {
+			/*	motors.leftMotor(-100);
+				motors.rightMotor(-100);*/
+				//delay(UDELAY*2);
+			/*	motors.brake();
+				delay(5000);*/
+				break;
+			}
+		}
+	/*	motors.leftMotor(-200);
 		motors.rightMotor(-200);
-		delay(UDELAY);
+		delay(UDELAY);*/
+
+		// U-TURN SHOULD USE WHILE LOOP UNTIL CENTER SEE BLACK
+		// COUNTER TO SEE 
 	}
 	else
 	{
