@@ -4,8 +4,7 @@
 * Description: Maze Line Solver Vr 2.2 for the RedBot 5 IR sensors
 Can perform line following. Not smooth, but acceptable. Maze 1 SOLVED
 Can perform simple decision, but no left decision. Maze 2 SOLVED
-Can perform simple decision, and left decision too!. Maze 3 SOLVED
-U-TURN AND POLISHING CODE
+Can perform simple decision, and U turn to complete the Maze!
 ***********************************************************************/
 #include <RedBot.h>
 RedBotSensor left = RedBotSensor(A3);   // initialize a left sensor object on A3
@@ -18,6 +17,7 @@ RedBotSensor farL = RedBotSensor(A0);  // initialize a right sensor object on A7
 #define SPEED 100  // sets the nominal speed. Set to any number from 0 - 255.
 #define USPEED 110
 #define UDELAY 850 // Makes it turn almost 90 degree
+
 
 RedBotEncoder encoder = RedBotEncoder(A2, 10);  // initializes encoder on pins A2 and 10
 RedBotMotors motors;
@@ -34,6 +34,7 @@ int rightAvg = 0;
 int centerAvg = 0;
 int farRAvg = 0;
 int farLAvg = 0;
+int sdelay = 0;
 
 void setup()
 {
@@ -83,11 +84,11 @@ void loop()
 		rightSpeed = SPEED + 40;
 	}
 	if ((farRight() > THRESHOLD) && (rightSensors() > THRESHOLD) && (farLeft() < THRESHOLD)) {
-
 		Serial.println("Turn RIGHT");
-		leftSpeed = -SPEED;
-		rightSpeed = -SPEED;
-		delay(60); // May need to change to UDELAY
+			leftSpeed = -SPEED;
+			rightSpeed = -SPEED;
+
+			delay(115);
 	}
 	if ((farLeft() > THRESHOLD) && (leftSensors() > THRESHOLD) && (centerSensors() > THRESHOLD) && (farRight() < THRESHOLD)) {
 		Serial.println("deciding left");
@@ -102,34 +103,30 @@ void loop()
 	// TO-DO: Let turn performs before stop or u-turn
 	if ((leftSensors() < THRESHOLD) && (centerSensors() < THRESHOLD) && (rightSensors() < THRESHOLD) && (farRight() < THRESHOLD) && (farLeft() < THRESHOLD))
 	{
-		delay(100); 
+		//delay(100); 
 		Serial.println("U-TURN");
-		//motors.brake();
-		//driveDistance(1, -SPEED, SPEED); //drive forward 1 inches before U turn
-		while ((leftSensors() < THRESHOLD) && (centerSensors() < THRESHOLD) && (rightSensors() < THRESHOLD) && (farRight() < THRESHOLD) && (farLeft() < THRESHOLD)) {
-			motors.leftMotor(-100);
-			motors.rightMotor(-100);
-			if (centerSensors() > THRESHOLD && leftSensors() > THRESHOLD); {
-			/*	motors.leftMotor(-100);
-				motors.rightMotor(-100);*/
-				//delay(UDELAY*2);
-			/*	motors.brake();
-				delay(5000);*/
-				break;
-			}
-		}
-	/*	motors.leftMotor(-200);
-		motors.rightMotor(-200);
-		delay(UDELAY);*/
+		motors.brake();
+		//driveDistance(3, -SPEED, SPEED); //drive forward 1 inches before U turn
+		motors.leftMotor(100);
+		motors.rightMotor(100);
+		delay(UDELAY);
+		//while ((leftSensors() < THRESHOLD) && (centerSensors() < THRESHOLD) && (rightSensors() < THRESHOLD) && (farRight() < THRESHOLD) && (farLeft() < THRESHOLD)) {
+		//	
+		//	motors.leftMotor(100);
+		//	motors.rightMotor(100);
+		//	if (centerSensors() > THRESHOLD && leftSensors() > THRESHOLD); {
+				//motors.leftMotor(-100);
+				//motors.rightMotor(-100);
+		//		//delay(UDELAY*2);
+		//	/*	motors.brake();
+		//		delay(5000);*/
+		//		break;
+		//	}
+		//}
 
-		// U-TURN SHOULD USE WHILE LOOP UNTIL CENTER SEE BLACK
-		// COUNTER TO SEE 
 	}
-	else
-	{
 		motors.leftMotor(leftSpeed);
 		motors.rightMotor(rightSpeed);
-	}
 	delay(0);
 }
 
@@ -230,7 +227,7 @@ void goForwardDecide() {
 	//delay(200);
 	motors.leftMotor(leftSpeed);
 	motors.rightMotor(rightSpeed);
-	delay(UDELAY);
+	delay(UDELAY-100);
 	motors.brake();
 }
 /********************************************
@@ -239,34 +236,27 @@ void goForwardDecide() {
 void goForwardDecideLeft() {
 	// move forward and decide based on values read.
 	Serial.println("Move forward an inch");
+	motors.brake();
 	driveDistance(1, -SPEED, SPEED); //drive forward an inch
-	delay(200); //delay
-	if (centerSensors() < THRESHOLD) {
-		// LEFT TURN
-		leftSpeed = SPEED;
+	//delay(200); //delay
+	if (centerSensors() > THRESHOLD || rightSensors() > THRESHOLD) {
+		// GO STRAIGHT
+		leftSpeed = -SPEED;
 		rightSpeed = SPEED;
+		sdelay = 100;
 
 	}
 	else
 	{
-		leftSpeed = -SPEED -50;
-		rightSpeed = SPEED +50;
+
+		// LEFT TURN
+		leftSpeed = SPEED;
+		rightSpeed = SPEED;
+		sdelay = UDELAY;
 	}
-	//else if ((right.read() < THRESHOLD) && (center.read() > THRESHOLD) && (left.read() < THRESHOLD)) {
-	//	leftSpeed = -SPEED;
-	//	rightSpeed = SPEED;
-	//}
-	////else {
-	////	leftSpeed = 0;
-	////	rightSpeed = 0;
-	////}
-	//delay(200);
-	//driveDistance(1, SPEED, -SPEED);
-	//delay(200);
 	motors.leftMotor(leftSpeed);
 	motors.rightMotor(rightSpeed);
-	delay(UDELAY-100);
-	//motors.brake();
+	delay(sdelay);
 }
 /**
 * Drive distance function from RedBot library examples
